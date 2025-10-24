@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply m-0 font-sans antialiased subpixel-antialiased;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
+  }
+
+  code {
+    @apply font-mono;
+  }
+
+  /* Hide scrollbars across the app */
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+
+  *::-webkit-scrollbar {
+    display: none; /* WebKit browsers (Chrome, Safari, Edge) */
+  }
+
+  /* Custom scrollbar for specific elements if needed */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* Ensure clickable buttons show pointer cursor */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udemy Clone API Tester</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .section h2 {
+            color: #555;
+            margin-top: 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .endpoint {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .method {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        .get { background-color: #d4edda; color: #155724; }
+        .post { background-color: #d1ecf1; color: #0c5460; }
+        .put { background-color: #fff3cd; color: #856404; }
+        .delete { background-color: #f8d7da; color: #721c24; }
+        
+        .url {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 8px 0;
+        }
+        .description {
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        .test-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .test-btn:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .auth-section {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+        .token-display {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Udemy Clone API Tester</h1>
+        
+        <!-- Authentication Section -->
+        <div class="section auth-section">
+            <h2>🔐 Authentication</h2>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <div class="url">http://localhost:5000/api/users/register</div>
+                <div class="description">Register a new user</div>
+                
+                <label>Name:</label>
+                <input type="text" id="registerName" placeholder="John Doe" value="Test User">
+                
+                <label>Email:</label>
+                <input type="email" id="registerEmail" placeholder="user@example.com" value="test@example.com">
+                
+                <label>Password:</label>
+                <input type="password" id="registerPassword" placeholder="password" value="password123">
+                
+                <label>User Type:</label>
+                <select id="registerUserType">
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                </select>
+                
+                <button class="test-btn" onclick="testRegister()">Test Register</button>
+                <div id="registerResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <div class="url">http://localhost:5000/api/users/login</div>
+                <div class="description">Login user and get JWT token</div>
+                
+                <label>Email:</label>
+                <input type="email" id="loginEmail" placeholder="user@example.com" value="test@example.com">
+                
+                <label>Password:</label>
+                <input type="password" id="loginPassword" placeholder="password" value="password123">
+                
+                <button class="test-btn" onclick="testLogin()">Test Login</button>
+                <div id="loginResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/users/profile</div>
+                <div class="description">Get user profile (requires token)</div>
+                
+                <button class="test-btn" onclick="testProfile()">Test Profile</button>
+                <div id="profileResult"></div>
+            </div>
+            
+            <div class="token-display">
+                <strong>Current Token:</strong>
+                <div id="currentToken">No token set</div>
+            </div>
+        </div>
+
+        <!-- Course Management Section -->
+        <div class="section">
+            <h2>📚 Course Management</h2>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/courses</div>
+                <div class="description">Get all published courses</div>
+                
+                <button class="test-btn" onclick="testGetCourses()">Test Get Courses</button>
+                <div id="getCoursesResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/courses/:id</div>
+                <div class="description">Get specific course by ID</div>
+                
+                <label>Course ID:</label>
+                <input type="text" id="courseId" placeholder="course_1" value="course_1">
+                
+                <button class="test-btn" onclick="testGetCourse()">Test Get Course</button>
+                <div id="getCourseResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <div class="url">http://localhost:5000/api/courses</div>
+                <div class="description">Create new course (instructor only)</div>
+                
+                <label>Title:</label>
+                <input type="text" id="courseTitle" placeholder="Course Title" value="Test Course">
+                
+                <label>Subtitle:</label>
+                <input type="text" id="courseSubtitle" placeholder="Course Subtitle" value="Learn amazing things">
+                
+                <label>Price:</label>
+                <input type="number" id="coursePrice" placeholder="99" value="99">
+                
+                <button class="test-btn" onclick="testCreateCourse()">Test Create Course</button>
+                <div id="createCourseResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/courses/instructor</div>
+                <div class="description">Get instructor's courses</div>
+                
+                <button class="test-btn" onclick="testGetInstructorCourses()">Test Get Instructor Courses</button>
+                <div id="getInstructorCoursesResult"></div>
+            </div>
+        </div>
+
+        <!-- Course Data Endpoints -->
+        <div class="section">
+            <h2>📖 Course Data</h2>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/courses/:id/basic</div>
+                <div class="description">Get basic course information</div>
+                
+                <button class="test-btn" onclick="testCourseBasic()">Test Course Basic</button>
+                <div id="courseBasicResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/courses/:id/curriculum</div>
+                <div class="description">Get course curriculum</div>
+                
+                <button class="test-btn" onclick="testCourseCurriculum()">Test Course Curriculum</button>
+                <div id="courseCurriculumResult"></div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <div class="url">http://localhost:5000/api/courses/:id/reviews</div>
+                <div class="description">Get course reviews</div>
+                
+                <button class="test-btn" onclick="testCourseReviews()">Test Course Reviews</button>
+                <div id="courseReviewsResult"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = localStorage.getItem('token');
+        updateTokenDisplay();
+
+        function updateTokenDisplay() {
+            document.getElementById('currentToken').textContent = authToken || 'No token set';
+        }
+
+        async function makeRequest(url, method = 'GET', body = null, requiresAuth = false) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+
+            if (requiresAuth && authToken) {
+                options.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                return { success: response.ok, data, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        function displayResult(elementId, result) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '';
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${result.success ? 'success' : 'error'}`;
+            
+            if (result.success) {
+                resultDiv.textContent = JSON.stringify(result.data, null, 2);
+            } else {
+                resultDiv.textContent = result.error || JSON.stringify(result.data, null, 2);
+            }
+            
+            element.appendChild(resultDiv);
+        }
+
+        // Authentication Tests
+        async function testRegister() {
+            const body = {
+                name: document.getElementById('registerName').value,
+                email: document.getElementById('registerEmail').value,
+                password: document.getElementById('registerPassword').value,
+                userType: document.getElementById('registerUserType').value
+            };
+            
+            const result = await makeRequest('http://localhost:5000/api/users/register', 'POST', body);
+            displayResult('registerResult', result);
+            
+            if (result.success && result.data.token) {
+                authToken = result.data.token;
+                localStorage.setItem('token', authToken);
+                updateTokenDisplay();
+            }
+        }
+
+        async function testLogin() {
+            const body = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+            
+            const result = await makeRequest('http://localhost:5000/api/users/login', 'POST', body);
+            displayResult('loginResult', result);
+            
+            if (result.success && result.data.token) {
+                authToken = result.data.token;
+                localStorage.setItem('token', authToken);
+                updateTokenDisplay();
+            }
+        }
+
+        async function testProfile() {
+            const result = await makeRequest('http://localhost:5000/api/users/profile', 'GET', null, true);
+            displayResult('profileResult', result);
+        }
+
+        // Course Tests
+        async function testGetCourses() {
+            const result = await makeRequest('http://localhost:5000/api/courses');
+            displayResult('getCoursesResult', result);
+        }
+
+        async function testGetCourse() {
+            const courseId = document.getElementById('courseId').value;
+            const result = await makeRequest(`http://localhost:5000/api/courses/${courseId}`);
+            displayResult('getCourseResult', result);
+        }
+
+        async function testCreateCourse() {
+            const body = {
+                title: document.getElementById('courseTitle').value,
+                subtitle: document.getElementById('courseSubtitle').value,
+                price: parseInt(document.getElementById('coursePrice').value)
+            };
+            
+            const result = await makeRequest('http://localhost:5000/api/courses', 'POST', body, true);
+            displayResult('createCourseResult', result);
+        }
+
+        async function testGetInstructorCourses() {
+            const result = await makeRequest('http://localhost:5000/api/courses/instructor', 'GET', null, true);
+            displayResult('getInstructorCoursesResult', result);
+        }
+
+        // Course Data Tests
+        async function testCourseBasic() {
+            const result = await makeRequest('http://localhost:5000/api/courses/course_1/basic');
+            displayResult('courseBasicResult', result);
+        }
+
+        async function testCourseCurriculum() {
+            const result = await makeRequest('http://localhost:5000/api/courses/course_1/curriculum');
+            displayResult('courseCurriculumResult', result);
+        }
+
+        async function testCourseReviews() {
+            const result = await makeRequest('http://localhost:5000/api/courses/course_1/reviews');
+            displayResult('courseReviewsResult', result);
+        }
+    </script>
+</body>
+</html> 
