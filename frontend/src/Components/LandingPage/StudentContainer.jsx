@@ -27,7 +27,7 @@ const CoursesSection = ({
 
   if (loading) {
     return (
-      <div className="mt-[4.8rem]">
+      <div className="mt-[2.4rem]">
         <h2 className="mb-[1.6rem] max-w-[80rem] font-bold text-[1.5rem] tracking-[0.02rem] leading-[1.2]">
           {title}{" "}
           {highlight && <span className="text-[#8710d8]">"{highlight}"</span>}
@@ -48,7 +48,7 @@ const CoursesSection = ({
   }
 
   return (
-    <div className="mt-[4.8rem] hover:cursor-pointer">
+    <div className="mt-[2.4rem] hover:cursor-pointer">
       <h2 className="mb-[1.6rem] max-w-[80rem] font-bold text-[1.5rem] tracking-[0.02rem] leading-[1.2]">
         {title}{" "}
         {highlight && <span className="text-[#8710d8]">"{highlight}"</span>}
@@ -104,7 +104,7 @@ const StudentContainer = () => {
   }, []);
 
   return (
-    <div className="mt-[6.4rem] px-[2.4rem]">
+    <div className="px-[2.4rem]">
       <CoursesSection
         title="Students are viewing"
         data={studentsViewingCourses}

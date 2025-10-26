@@ -21,7 +21,7 @@ const Landin = () => {
 
 const Section = ({ children, className = "" }) => {
   return (
-    <div className={`w-full max-w-[1340px] mx-auto px-6 py-10 ${className}`}>
+    <div className={`w-full max-w-[1340px] mx-auto px-6 py-3 ${className}`}>
       {children}
     </div>
   );

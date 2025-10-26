@@ -1,39 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { instructorService } from "../../services/instructorService";
-import { courseService } from "../../services/courseService";
 
 const CourseCreation = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [courseData, setCourseData] = useState({
     courseType: "",
     title: "",
-    category: "",
     timeCommitment: "",
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
-  const [availableCategories, setAvailableCategories] = useState([]);
-
-  // Load categories from backend so it's uniform across the app
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const res = await courseService.getHomeCategories();
-        const list = res?.data || res || [];
-        setAvailableCategories(list);
-      } catch (e) {
-        setAvailableCategories([
-          { title: "Development" },
-          { title: "Business" },
-          { title: "Design" },
-          { title: "IT & Software" },
-        ]);
-      }
-    };
-    loadCategories();
-  }, []);
 
   const steps = [
     {
@@ -65,13 +43,6 @@ const CourseCreation = () => {
     },
     {
       id: 3,
-      title: "What category best fits the knowledge you'll share?",
-      subtitle:
-        "If you're not sure about the right category, you can change it later.",
-      options: [],
-    },
-    {
-      id: 4,
       title: "How much time can you spend creating your course per week?",
       subtitle:
         "There's no wrong answer. We can help you create a course that fits your schedule.",
@@ -111,9 +82,6 @@ const CourseCreation = () => {
       case "courseType":
         if (!value) return "Please select a course type";
         return "";
-      case "category":
-        if (!value) return "Please select a category";
-        return "";
       case "timeCommitment":
         if (!value) return "Please select your time commitment";
         return "";
@@ -126,8 +94,7 @@ const CourseCreation = () => {
     const stepKey = {
       1: "courseType",
       2: "title",
-      3: "category",
-      4: "timeCommitment",
+      3: "timeCommitment",
     };
 
     const field = stepKey[currentStep];
@@ -143,8 +110,7 @@ const CourseCreation = () => {
     const stepKey = {
       1: "courseType",
       2: "title",
-      3: "category",
-      4: "timeCommitment",
+      3: "timeCommitment",
     };
 
     const field = stepKey[currentStep];
@@ -215,7 +181,6 @@ const CourseCreation = () => {
     setTouched({
       courseType: true,
       title: true,
-      category: true,
       timeCommitment: true,
     });
 
@@ -226,7 +191,6 @@ const CourseCreation = () => {
     try {
       const result = await instructorService.createCourse({
         title: dataToUse.title,
-        category: dataToUse.category,
         type: dataToUse.courseType,
         timeCommitment: dataToUse.timeCommitment,
       });
@@ -303,8 +267,8 @@ const CourseCreation = () => {
 
           {/* Step Content */}
           <div className="space-y-4">
-            {/* Step 1 & 4: Option Cards */}
-            {(currentStep === 1 || currentStep === 4) && (
+            {/* Step 1 & 3: Option Cards */}
+            {(currentStep === 1 || currentStep === 3) && (
               <div className="space-y-3">
                 {currentStepData.options.map((option) => (
                   <button
@@ -414,53 +378,6 @@ const CourseCreation = () => {
               </div>
             )}
 
-            {/* Step 3: Category Selection */}
-            {currentStep === 3 && (
-              <div className="space-y-6">
-                <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {(availableCategories || []).map((cat) => (
-                      <button
-                        key={cat.slug || cat.title}
-                        onClick={() => handleOptionSelect(cat.title)}
-                        className="p-3 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-25 transition-all duration-200 text-left"
-                      >
-                        <span className="text-gray-900 font-medium text-sm">
-                          {cat.title}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Error Message */}
-                  {touched.category && errors.category && (
-                    <div className="mt-3 text-sm text-red-600 flex items-center">
-                      <svg
-                        className="w-4 h-4 mr-2"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {errors.category}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex justify-between">
-                  <button
-                    onClick={handleBack}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
-                  >
-                    Previous
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Final Step: Course Creation Summary */}
             {currentStep > steps.length && (
@@ -507,12 +424,6 @@ const CourseCreation = () => {
                       <span className="text-gray-600">Title:</span>
                       <span className="font-medium text-gray-900">
                         {courseData.title}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Category:</span>
-                      <span className="font-medium text-gray-900">
-                        {courseData.category}
                       </span>
                     </div>
                     <div className="flex justify-between">

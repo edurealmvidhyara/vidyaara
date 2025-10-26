@@ -79,17 +79,76 @@ const CourseSuggestions = () => {
       setError(null);
 
       const selectedTab = courseTabs.find((tab) => tab.id === tabId);
+      
+      // Define keywords for each tab to filter by title
+      const getKeywords = (tabId) => {
+        switch (tabId) {
+          case "Python":
+            return ["python", "django", "flask", "pandas", "numpy", "data science", "machine learning"];
+          case "JS":
+            return ["javascript", "js", "react", "node", "vue", "angular", "jquery"];
+          case "Aws":
+            return ["aws", "amazon web services", "cloud", "ec2", "s3", "lambda", "certification"];
+          case "Excel":
+            return ["excel", "spreadsheet", "microsoft", "vba", "pivot", "formula"];
+          case "DataScience":
+            return ["data science", "data analysis", "machine learning", "ai", "artificial intelligence", "statistics", "analytics"];
+          default:
+            return [];
+        }
+      };
+
+      const keywords = getKeywords(tabId);
+      
+      // First, get all courses from the category
       const params = {
         category: selectedTab?.category || "Development",
-        limit: 10,
+        limit: 50, // Get more courses to filter from
         sort: "newest",
       };
 
       const response = await courseService.getAllCourses(params);
 
       if (response.success && response.data) {
-        // Transform API data to match CourseCard component expectations
-        const transformedCourses = response.data.courses || [];
+        let allCourses = response.data.courses || [];
+        
+        // Filter courses by title containing any of the keywords
+        let filteredCourses = allCourses;
+        if (keywords.length > 0) {
+          console.log(`Filtering for tab ${tabId} with keywords:`, keywords);
+          console.log(`Total courses before filtering: ${allCourses.length}`);
+          
+          filteredCourses = allCourses.filter(course => {
+            const title = (course.title || "").toLowerCase();
+            const subtitle = (course.subtitle || "").toLowerCase();
+            const description = (course.description || "").toLowerCase();
+            const topic = (course.topic || "").toLowerCase();
+            
+            // Check if any keyword appears in title, subtitle, description, or topic
+            const matches = keywords.some(keyword => 
+              title.includes(keyword.toLowerCase()) ||
+              subtitle.includes(keyword.toLowerCase()) ||
+              description.includes(keyword.toLowerCase()) ||
+              topic.includes(keyword.toLowerCase())
+            );
+            
+            if (matches) {
+              console.log(`Course matches: ${course.title}`);
+            }
+            
+            return matches;
+          });
+          
+          console.log(`Courses after filtering: ${filteredCourses.length}`);
+        }
+        
+        // If no courses match keywords, fall back to showing all courses from category
+        if (filteredCourses.length === 0) {
+          filteredCourses = allCourses;
+        }
+        
+        // Limit to 10 courses for display
+        const transformedCourses = filteredCourses.slice(0, 10);
         setCourses(transformedCourses);
       } else {
         throw new Error("Failed to fetch courses");

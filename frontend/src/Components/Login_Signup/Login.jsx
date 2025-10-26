@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import blackLogo from "../../assets/black-logo-cropped.svg";
 
 const Login = () => {
   const [userdata, setUserdata] = useState({ email: "", password: "" });
@@ -71,7 +72,7 @@ const Login = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link to="/" className="flex justify-center ">
           <img
-            src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
+            src={blackLogo}
             alt="Vidhyara"
             className="h-10 mb-6"
           />

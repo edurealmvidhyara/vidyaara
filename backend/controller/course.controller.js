@@ -20,12 +20,12 @@ router.post("/:id/rate", authenticate, async (req, res) => {
     const { value, comment } = req.body;
 
     // Only students can rate courses
-    if (req.user.role !== "student") {
-      return res.status(403).json({
-        success: false,
-        message: "Only students can rate courses",
-      });
-    }
+    // if (req.user.role !== "student") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Only students can rate courses",
+    //   });
+    // }
 
     if (!value || value < 1 || value > 5) {
       return res
