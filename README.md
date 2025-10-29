@@ -5,7 +5,7 @@ A full-stack Udemy clone built with React (Vite) frontend and Express.js backend
 ## Project Structure
 
 ```
-Udemy-Clone-main/
+vidhyara/
 ├── frontend/          # React + Vite frontend (runs on port 3000)
 ├── backend/           # Express.js backend (runs on port 5000)
 └── README.md
@@ -115,4 +115,4 @@ The backend provides RESTful API endpoints for:
 - Frontend uses Vite for fast development and building
 - Backend uses nodemon for auto-restart during development
 - Frontend proxies API calls to backend during development
-# vidyaara
+# vidhyara

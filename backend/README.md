@@ -61,7 +61,7 @@ A comprehensive backend API for a free Udemy clone with instructor and student u
 ## Environment Variables
 
 ```env
-MONGO_URL=mongodb://localhost:27017/udemy-clone
+MONGO_URL=mongodb://localhost:27017/vidhyara
 PORT=5000
 JWT_SECRET=your-secret-key-here
 ```

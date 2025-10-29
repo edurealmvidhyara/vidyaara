@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { instructorService } from "../../services/instructorService";
+import blackLogo from "../../assets/black-logo-cropped.svg";
 
 const CourseCreation = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -219,13 +220,13 @@ const CourseCreation = () => {
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <Link to="/" className="flex items-center">
             <img
-              src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
+              src={blackLogo}
               alt="Vidhyara"
               className="h-8"
             />
           </Link>
           <button
-            onClick={() => navigate("/instructor/courses")}
+            onClick={() => navigate("/inblackLogostructor/courses")}
             className="text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors"
           >
             Exit
